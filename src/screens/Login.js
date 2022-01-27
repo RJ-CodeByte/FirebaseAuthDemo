@@ -11,15 +11,17 @@ import React, {useState} from 'react';
 import Logo from '../../assets/Login.png';
 import CustomInput from '../components/CustomInput';
 import CustomButton from '../components/CustomButton';
+import Auth from './../Auth/AuthenticationProvider';
 
 export default function Login({navigation}) {
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const {height} = useWindowDimensions();
 
   const onSignInPressed = () => {
-    console.warn('Sign In');
+    Auth.signIn(email, password);
+    navigation.navigate('Home');
   };
 
   const onForgotPasswordPressed = () => {
@@ -53,11 +55,7 @@ export default function Login({navigation}) {
           resizeMode="contain"
         />
         <Text style={styles.text}>Login Yourself</Text>
-        <CustomInput
-          placeholder="Username"
-          value={username}
-          setvalue={setUsername}
-        />
+        <CustomInput placeholder="email" value={email} setvalue={setEmail} />
         <CustomInput
           placeholder="Password"
           value={password}

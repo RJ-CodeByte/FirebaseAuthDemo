@@ -1,12 +1,8 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  ScrollView,
-} from 'react-native';
+import {StyleSheet, Text, View, ScrollView} from 'react-native';
 import React, {useState} from 'react';
 import CustomInput from '../components/CustomInput';
 import CustomButton from '../components/CustomButton';
+import Auth from './../Auth/AuthenticationProvider';
 
 export default function SignUp({navigation}) {
   const [username, setUsername] = useState('');
@@ -14,9 +10,10 @@ export default function SignUp({navigation}) {
   const [password, setPassword] = useState('');
   const [passwordRepeat, setPasswordRepeat] = useState('');
 
-
   const onRegisterPressed = () => {
-    console.warn('Sign In');
+    Auth.signUp(username, email, password);
+    navigation.navigate('Login');
+    // console.warn('Sign In');
   };
 
   const onSignInFBPressed = () => {
@@ -44,11 +41,7 @@ export default function SignUp({navigation}) {
           value={username}
           setvalue={setUsername}
         />
-        <CustomInput
-          placeholder="Email"
-          value={email}
-          setvalue={setemail}
-        />
+        <CustomInput placeholder="Email" value={email} setvalue={setemail} />
         <CustomInput
           placeholder="Password"
           value={password}
@@ -67,9 +60,11 @@ export default function SignUp({navigation}) {
           type={'PRIMARY'}
         />
 
-    <Text style={styles.text}>By Registering, You Confirm that you accept our{' '} 
-    <Text style={styles.link}>Terms of Use</Text> &{' '} 
-    <Text style={styles.link}>Privacy Policy</Text></Text>
+        <Text style={styles.text}>
+          By Registering, You Confirm that you accept our{' '}
+          <Text style={styles.link}>Terms of Use</Text> &{' '}
+          <Text style={styles.link}>Privacy Policy</Text>
+        </Text>
         <CustomButton
           text={'Sign In With Facebook'}
           onPress={onSignInFBPressed}
@@ -111,9 +106,9 @@ const styles = StyleSheet.create({
   },
   text: {
     color: 'gray',
-    marginVertical:10,
+    marginVertical: 10,
   },
-  link:{
-    color:'#FDB075'
+  link: {
+    color: '#FDB075',
   },
 });

@@ -1,13 +1,32 @@
-import React,{useEffect} from 'react';
-import { Image, StyleSheet, Text, View } from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {Image, StyleSheet, Text, View} from 'react-native';
+import auth from '@react-native-firebase/auth';
 
 export default function Splash({navigation}) {
-  
+  const [initializing, setInitializing] = useState(true);
+  const [user, setUser] = useState();
+
+  function onAuthStateChanged(user) {
+    setUser(user);
+    if (initializing) setInitializing(false);
+  }
+
+  function onSubscribe() {
+    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+    return subscriber; // unsubscribe on unmount
+  }
+
   useEffect(() => {
     setTimeout(() => {
-      navigation.replace('Login');
+      onSubscribe();
+      {
+        !user ? navigation.navigate('Auth') : navigation.navigate('Home');
+      }
+      // navigation.push();
     }, 2000);
   }, []);
+
+  if (initializing) return null;
 
   return (
     <View style={styles.body}>
