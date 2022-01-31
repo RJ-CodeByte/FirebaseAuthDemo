@@ -1,24 +1,26 @@
 import {View, Text, StyleSheet, Image} from 'react-native';
-import React,{useState} from 'react';
+import React, {useEffect} from 'react';
 import CustomButton from '../components/CustomButton';
-import {
-  GoogleSignin,
-  statusCodes,
-} from '@react-native-google-signin/google-signin';
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import auth from '@react-native-firebase/auth';
 
 function Home({navigation}) {
   const currentUser = auth().currentUser;
+
+  useEffect(() => {
+    GoogleSignin.configure({
+      webClientId:
+        '858202352130-qhuk9inh0uguivmht1uerighc6qlkt5t.apps.googleusercontent.com',
+    });
+  }, []);
+
   const signOut = async () => {
     try {
       await GoogleSignin.revokeAccess();
       await GoogleSignin.signOut();
       const currentUser = await GoogleSignin.getCurrentUser();
       auth().signOut();
-      setuserInfo([]);
-
-      console.log(currentUser);
-      // this.setState({ user: null }); // Remember to remove the user from your app's state as well
+      navigation.replace('Auth');
     } catch (error) {
       console.error(error);
     }
@@ -26,18 +28,12 @@ function Home({navigation}) {
 
   return (
     <View style={styles.container}>
-      <Image style={styles.logo} source={{uri:currentUser.photoURL}}/>
+      <Image style={styles.logo} source={{uri: currentUser.photoURL}} />
       <Text>{currentUser.email}</Text>
       <Text>{currentUser.displayName}</Text>
       {/* <Text>{user}</Text> */}
       <CustomButton
-        onPress={() =>
-          signOut().then(() => {
-            navigation.navigate('Auth',{
-              userInfo:null
-            });
-          })
-        }
+        onPress={signOut}
         text={'Sign Out'}
       />
     </View>

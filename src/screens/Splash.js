@@ -8,16 +8,13 @@ export default function Splash({navigation}) {
   useEffect(() => {
     setTimeout(() => {
       console.log(user);
-      if (user) {
-        navigation.replace('Home',{
-          userEmail: user.email,
-                userName: user.displayName,
-        });
-      } else {
-        navigation.navigate('Auth',{
-          userInfo:user
-        });
-      }
+      auth().onAuthStateChanged(user => {
+        if (user) {
+          navigation.replace('Home');
+        } else {
+          navigation.replace('Auth');
+        }
+      });
     }, 2000);
   }, []);
 

@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View, ScrollView} from 'react-native';
+import {StyleSheet, Text, View, ScrollView, Alert} from 'react-native';
 import React, {useState} from 'react';
 import CustomInput from '../components/CustomInput';
 import CustomButton from '../components/CustomButton';
@@ -68,7 +68,13 @@ export default function SignUp({navigation}) {
         <CustomButton
           text={'Register'}
           onPress={()=>{onRegisterPressed().then(()=>{
-            navigation.navigation("Login");
+            auth().onAuthStateChanged(user => {
+              if (user) {
+                navigation.replace('Login');
+              } else {
+                navigation.replace('SignUp');
+              }
+            });
           })}}
           type={'PRIMARY'}
         />

@@ -34,11 +34,12 @@ export default function Login({navigation}) {
   const onSignInPressed = async () => {
     if (!email || !password) {
       Alert.alert('Error', 'Please enter all fields');
-    }
-    try {
-      await auth().signInWithEmailAndPassword(email, password);
-    } catch (err) {
-      return Alert.alert(err.code, err.message);
+    } else {
+      try {
+        await auth().signInWithEmailAndPassword(email, password);
+      } catch (err) {
+        return Alert.alert(err.code, err.message);
+      }
     }
   };
 
@@ -104,22 +105,38 @@ export default function Login({navigation}) {
         <CustomButton
           text={'Sign In'}
           onPress={() => {
-            onSignInPressed().then(() => navigation.replace('Home'));
+            onSignInPressed().then(() => {
+              auth().onAuthStateChanged(user => {
+                if (user) {
+                  navigation.replace('Home');
+                } else {
+                  navigation.replace('Auth');
+                }
+              });
+            });
           }}
           type={'PRIMARY'}
-        />
-        <CustomButton
-          text={'Sign In With Google'}
-          onPress={() => {
-            onSignInGooglePressed().then(() => navigation.replace('Home'));
-          }}
-          bgColor="#FAE9EA"
-          fgColor="#ff6b6b"
         />
         <CustomButton
           text={'Forgot Password?'}
           onPress={onForgotPasswordPressed}
           type={'TERTIARY'}
+        />
+        <CustomButton
+          text={'Sign In With Google'}
+          onPress={() => {
+            onSignInGooglePressed().then(() => {
+              auth().onAuthStateChanged(user => {
+                if (user) {
+                  navigation.replace('Home');
+                } else {
+                  navigation.replace('Auth');
+                }
+              });
+            });
+          }}
+          bgColor="#FAE9EA"
+          fgColor="#ff6b6b"
         />
         <CustomButton
           text={'Sign In With Facebook'}
