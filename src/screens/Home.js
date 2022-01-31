@@ -4,9 +4,8 @@ import CustomButton from '../components/CustomButton';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import auth from '@react-native-firebase/auth';
 
-function Home({navigation}) {
+function Home({navigation,route}) {
   const currentUser = auth().currentUser;
-
   useEffect(() => {
     GoogleSignin.configure({
       webClientId:
@@ -15,27 +14,24 @@ function Home({navigation}) {
   }, []);
 
   const signOut = async () => {
-    try {
+      auth().signOut();
+      if(GoogleSignin.isSignedIn()){
       await GoogleSignin.revokeAccess();
       await GoogleSignin.signOut();
-      const currentUser = await GoogleSignin.getCurrentUser();
-      auth().signOut();
+      await GoogleSignin.getCurrentUser();
+      }
       navigation.replace('Auth');
-    } catch (error) {
-      console.error(error);
-    }
   };
 
   return (
     <View style={styles.container}>
-      <Image style={styles.logo} source={{uri: currentUser.photoURL}} />
+      {currentUser.photoURL ? (
+        <Image style={styles.logo} source={{uri: currentUser.photoURL}} />
+      ) : null}
       <Text>{currentUser.email}</Text>
       <Text>{currentUser.displayName}</Text>
       {/* <Text>{user}</Text> */}
-      <CustomButton
-        onPress={signOut}
-        text={'Sign Out'}
-      />
+      <CustomButton onPress={signOut} text={'Sign Out'} />
     </View>
   );
 }

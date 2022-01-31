@@ -60,6 +60,7 @@ export default function Login({navigation}) {
       const googleCredential = auth.GoogleAuthProvider.credential(idToken);
       // console.log(googleCredential);
       await auth().signInWithCredential(googleCredential);
+
     } catch (error) {
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
         // user cancelled the login flow
