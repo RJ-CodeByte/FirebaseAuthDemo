@@ -1,16 +1,18 @@
-import {Text, StyleSheet, View} from 'react-native';
-import React, {Component, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import Splash from './src/screens/Splash';
-import Login from './src/screens/Login';
-import SignUp from './src/screens/Register';
-import Home from './src/screens/Home';
+import Splash from './screens/Splash';
+import Login from './screens/Login';
+import SignUp from './screens/Register';
+import Home from './screens/Home';
 import auth from '@react-native-firebase/auth';
 
 const Stack = createNativeStackNavigator();
 
+
 function AuthNavigator() {
+  
+  
   return (
     <Stack.Navigator>
       <Stack.Screen
@@ -27,7 +29,7 @@ function AuthNavigator() {
   );
 }
 
-export default function App() {
+export default function App() { 
   return (
     <NavigationContainer>
       <Stack.Navigator>
@@ -36,7 +38,6 @@ export default function App() {
           component={Splash}
           options={{headerShown: false}}
         />
-
         <Stack.Screen
           name="Auth"
           component={AuthNavigator}

@@ -2,7 +2,7 @@ import {StyleSheet, Text, View, ScrollView} from 'react-native';
 import React, {useState} from 'react';
 import CustomInput from '../components/CustomInput';
 import CustomButton from '../components/CustomButton';
-import Auth from './../Auth/AuthenticationProvider';
+import auth from '@react-native-firebase/auth';
 
 export default function SignUp({navigation}) {
   const [username, setUsername] = useState('');
@@ -10,10 +10,21 @@ export default function SignUp({navigation}) {
   const [password, setPassword] = useState('');
   const [passwordRepeat, setPasswordRepeat] = useState('');
 
-  const onRegisterPressed = () => {
-    Auth.signUp(username, email, password);
-    navigation.navigate('Login');
-    // console.warn('Sign In');
+  const onRegisterPressed = async () => {
+    if (!username || !email || !password) {
+      Alert.alert('Error', 'Please enter all fields');
+    }else{
+    try {
+      const cred = await auth().createUserWithEmailAndPassword(email, password);
+      const {uid} = cred.user;
+      auth().currentUser.updateProfile({
+        displayName: username,
+      });
+      return uid;
+    } catch (err) {
+      return Alert.alert(err.code, err.message);
+    }
+    }
   };
 
   const onSignInFBPressed = () => {
@@ -56,7 +67,9 @@ export default function SignUp({navigation}) {
         />
         <CustomButton
           text={'Register'}
-          onPress={onRegisterPressed}
+          onPress={()=>{onRegisterPressed().then(()=>{
+            navigation.navigation("Login");
+          })}}
           type={'PRIMARY'}
         />
 

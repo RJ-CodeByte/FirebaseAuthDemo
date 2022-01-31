@@ -6,12 +6,17 @@ import {
   useWindowDimensions,
   ScrollView,
   SafeAreaView,
+  Alert,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import Logo from '../../assets/Login.png';
 import CustomInput from '../components/CustomInput';
 import CustomButton from '../components/CustomButton';
-import Auth from './../Auth/AuthenticationProvider';
+import auth from '@react-native-firebase/auth';
+import {
+  GoogleSignin,
+  statusCodes,
+} from '@react-native-google-signin/google-signin';
 
 export default function Login({navigation}) {
   const [email, setEmail] = useState('');
@@ -19,9 +24,22 @@ export default function Login({navigation}) {
 
   const {height} = useWindowDimensions();
 
-  const onSignInPressed = () => {
-    Auth.signIn(email, password);
-    navigation.navigate('Home');
+  useEffect(() => {
+    GoogleSignin.configure({
+      webClientId:
+        '858202352130-qhuk9inh0uguivmht1uerighc6qlkt5t.apps.googleusercontent.com',
+    });
+  }, []);
+
+  const onSignInPressed = async () => {
+    if (!email || !password) {
+      Alert.alert('Error', 'Please enter all fields');
+    }
+    try {
+      await auth().signInWithEmailAndPassword(email, password);
+    } catch (err) {
+      return Alert.alert(err.code, err.message);
+    }
   };
 
   const onForgotPasswordPressed = () => {
@@ -32,8 +50,29 @@ export default function Login({navigation}) {
     console.warn('Sign in with facebook');
   };
 
-  const onSignInGooglePressed = () => {
-    console.warn('Sign In with Google');
+  const onSignInGooglePressed = async () => {
+    try {
+      // Get the users ID token
+      const {idToken} = await GoogleSignin.signIn();
+
+      // Create a Google credential with the token
+      const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+      // console.log(googleCredential);
+      await auth().signInWithCredential(googleCredential);
+    } catch (error) {
+      if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+        // user cancelled the login flow
+        alert('Cancel');
+      } else if (error.code === statusCodes.IN_PROGRESS) {
+        alert('Signin in progress');
+        // operation (f.e. sign in) is in progress already
+      } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+        alert('PLAY_SERVICES_NOT_AVAILABLE');
+        // play services not available or outdated
+      } else {
+        // some other error happened
+      }
+    }
   };
 
   const onSignInTwitterPressed = () => {
@@ -64,8 +103,18 @@ export default function Login({navigation}) {
         />
         <CustomButton
           text={'Sign In'}
-          onPress={onSignInPressed}
+          onPress={() => {
+            onSignInPressed().then(() => navigation.replace('Home'));
+          }}
           type={'PRIMARY'}
+        />
+        <CustomButton
+          text={'Sign In With Google'}
+          onPress={() => {
+            onSignInGooglePressed().then(() => navigation.replace('Home'));
+          }}
+          bgColor="#FAE9EA"
+          fgColor="#ff6b6b"
         />
         <CustomButton
           text={'Forgot Password?'}
@@ -77,12 +126,6 @@ export default function Login({navigation}) {
           onPress={onSignInFBPressed}
           bgColor="#E7EAF4"
           fgColor="#4765A9"
-        />
-        <CustomButton
-          text={'Sign In With Google'}
-          onPress={onSignInGooglePressed}
-          bgColor="#FAE9EA"
-          fgColor="#ff6b6b"
         />
         <CustomButton
           text={'Sign In With Twitter'}

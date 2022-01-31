@@ -3,30 +3,23 @@ import {Image, StyleSheet, Text, View} from 'react-native';
 import auth from '@react-native-firebase/auth';
 
 export default function Splash({navigation}) {
-  const [initializing, setInitializing] = useState(true);
-  const [user, setUser] = useState();
-
-  function onAuthStateChanged(user) {
-    setUser(user);
-    if (initializing) setInitializing(false);
-  }
-
-  function onSubscribe() {
-    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
-    return subscriber; // unsubscribe on unmount
-  }
+  const user = auth().currentUser;
 
   useEffect(() => {
     setTimeout(() => {
-      onSubscribe();
-      {
-        !user ? navigation.navigate('Auth') : navigation.navigate('Home');
+      console.log(user);
+      if (user) {
+        navigation.replace('Home',{
+          userEmail: user.email,
+                userName: user.displayName,
+        });
+      } else {
+        navigation.navigate('Auth',{
+          userInfo:user
+        });
       }
-      // navigation.push();
     }, 2000);
   }, []);
-
-  if (initializing) return null;
 
   return (
     <View style={styles.body}>

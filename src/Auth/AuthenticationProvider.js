@@ -7,11 +7,10 @@ import {NavigationContainer} from '@react-navigation/native';
 const signUp = async (username, email, password) => {
   if (!username || !email || !password) {
     Alert.alert('Error', 'Please enter all fields');
-  }
+  }else{
   try {
-    const cred = await auth()
-      .createUserWithEmailAndPassword(email, password);
-    const { uid } = cred.user;
+    const cred = await auth().createUserWithEmailAndPassword(email, password);
+    const {uid} = cred.user;
     auth().currentUser.updateProfile({
       displayName: username,
     });
@@ -19,14 +18,14 @@ const signUp = async (username, email, password) => {
   } catch (err) {
     return Alert.alert(err.code, err.message);
   }
+  }
 };
 
 const signIn = async (email, password) => {
   if (!email || !password) {
     Alert.alert('Error', 'Please enter all fields');
-  }
-
-  try {
+  } 
+    try {
     await auth()
       .signInWithEmailAndPassword(email, password);
   } catch (err) {
@@ -46,12 +45,11 @@ const signOut = () => {
   return auth().signOut();
 };
 
+const Authticat = {
+  signUp,
+  signIn,
+  forgetPassword,
+  signOut,
+};
 
-const Auth = {
-    signUp,
-    signIn,
-    forgetPassword,
-    signOut,
-}
-
-export default Auth;
+export default Authticat;
