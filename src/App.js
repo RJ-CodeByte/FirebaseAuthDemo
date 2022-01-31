@@ -7,6 +7,7 @@ import SignUp from './screens/Register';
 import Home from './screens/Home';
 import auth from '@react-native-firebase/auth';
 import FirestoreDb from './screens/FirestoreDb';
+import FirestoreCRUD from './screens/FirestoreCRUD';
 
 const Stack = createNativeStackNavigator();
 
@@ -64,9 +65,10 @@ export default function App() {
         <Stack.Screen
           name="FirestoreDb"
           component={FirestoreDb}
-          options={{
-            headerTitle:"FireStore Database"
-          }}
+        />
+        <Stack.Screen
+          name="FirestoreCRUD"
+          component={FirestoreCRUD}
         />
       </Stack.Navigator>
     </NavigationContainer>

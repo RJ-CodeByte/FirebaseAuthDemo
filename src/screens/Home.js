@@ -32,7 +32,8 @@ function Home({navigation,route}) {
       <Text>{currentUser.displayName}</Text>
       {/* <Text>{user}</Text> */}
       <CustomButton onPress={signOut} text={'Sign Out'} />
-      <CustomButton onPress={()=>navigation.navigate('FirestoreDb')} text={'Firestore'} />
+      <CustomButton onPress={()=>navigation.navigate('FirestoreDb')} text={'Firestore FLATLIST'} />
+      <CustomButton onPress={()=>navigation.navigate('FirestoreCRUD')} text={'Firestore CRUD'} />
     </View>
   );
 }
