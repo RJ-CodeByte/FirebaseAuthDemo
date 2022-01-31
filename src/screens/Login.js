@@ -28,6 +28,7 @@ export default function Login({navigation}) {
     GoogleSignin.configure({
       webClientId:
         '858202352130-qhuk9inh0uguivmht1uerighc6qlkt5t.apps.googleusercontent.com',
+        offlineAccess:true,
     });
   }, []);
 

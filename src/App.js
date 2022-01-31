@@ -6,6 +6,7 @@ import Login from './screens/Login';
 import SignUp from './screens/Register';
 import Home from './screens/Home';
 import auth from '@react-native-firebase/auth';
+import FirestoreDb from './screens/FirestoreDb';
 
 const Stack = createNativeStackNavigator();
 
@@ -32,7 +33,19 @@ function AuthNavigator() {
 export default function App() { 
   return (
     <NavigationContainer>
-      <Stack.Navigator>
+      <Stack.Navigator
+      screenOptions={{
+        headerTitleAlign:'center',
+        headerStyle:{
+          backgroundColor:'#0080ff'
+        },
+        headerTintColor:'#ffffff',
+        headerTitleStyle:{
+          fontSize:25,
+          fontWeight:'bold'
+        }
+      }}
+      >
         <Stack.Screen
           name="Splash"
           component={Splash}
@@ -47,6 +60,13 @@ export default function App() {
           name="Home"
           component={Home}
           options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="FirestoreDb"
+          component={FirestoreDb}
+          options={{
+            headerTitle:"FireStore Database"
+          }}
         />
       </Stack.Navigator>
     </NavigationContainer>
