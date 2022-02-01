@@ -8,6 +8,7 @@ import Home from './screens/Home';
 import auth from '@react-native-firebase/auth';
 import FirestoreDb from './screens/FirestoreDb';
 import FirestoreCRUD from './screens/FirestoreCRUD';
+import RmtConfig from './screens/remoteConfig';
 
 const Stack = createNativeStackNavigator();
 
@@ -69,6 +70,10 @@ export default function App() {
         <Stack.Screen
           name="FirestoreCRUD"
           component={FirestoreCRUD}
+        />
+        <Stack.Screen
+          name="RemoteConfig"
+          component={RmtConfig}
         />
       </Stack.Navigator>
     </NavigationContainer>

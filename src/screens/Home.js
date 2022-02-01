@@ -15,11 +15,11 @@ function Home({navigation,route}) {
 
   const signOut = async () => {
       auth().signOut();
-      if(GoogleSignin.isSignedIn()){
-      await GoogleSignin.revokeAccess();
-      await GoogleSignin.signOut();
-      await GoogleSignin.getCurrentUser();
-      }
+      // if(GoogleSignin.isSignedIn()){
+      // await GoogleSignin.revokeAccess();
+      // await GoogleSignin.signOut();
+      // await GoogleSignin.getCurrentUser();
+      // }
       navigation.replace('Auth');
   };
 
@@ -34,6 +34,7 @@ function Home({navigation,route}) {
       <CustomButton onPress={signOut} text={'Sign Out'} />
       <CustomButton onPress={()=>navigation.navigate('FirestoreDb')} text={'Firestore FLATLIST'} />
       <CustomButton onPress={()=>navigation.navigate('FirestoreCRUD')} text={'Firestore CRUD'} />
+      <CustomButton onPress={()=>navigation.navigate('RemoteConfig')} text={'Remote Config'} />
     </View>
   );
 }

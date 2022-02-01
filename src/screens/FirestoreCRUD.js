@@ -58,6 +58,7 @@ export default function FirestoreCRUD() {
           alert('Updated SuccessFully!!')          
       })
   };
+  
   const Delete = () => { 
                 firestore()
                 .collection('MyCollection')
