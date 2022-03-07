@@ -28,7 +28,7 @@ export default function Login({navigation}) {
     GoogleSignin.configure({
       webClientId:
         '858202352130-qhuk9inh0uguivmht1uerighc6qlkt5t.apps.googleusercontent.com',
-        offlineAccess:true,
+      offlineAccess: true,
     });
   }, []);
 
@@ -44,8 +44,10 @@ export default function Login({navigation}) {
     }
   };
 
-  const onForgotPasswordPressed = () => {
-    console.warn('Forgot Password?');
+  const GooglesignIncancled = async () => {
+    await GoogleSignin.revokeAccess();
+    await GoogleSignin.signOut();
+    // console.warn('Forgot Password?');
   };
 
   const onSignInFBPressed = () => {
@@ -61,7 +63,6 @@ export default function Login({navigation}) {
       const googleCredential = auth.GoogleAuthProvider.credential(idToken);
       // console.log(googleCredential);
       await auth().signInWithCredential(googleCredential);
-
     } catch (error) {
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
         // user cancelled the login flow
@@ -121,13 +122,14 @@ export default function Login({navigation}) {
         />
         <CustomButton
           text={'Forgot Password?'}
-          onPress={onForgotPasswordPressed}
+          // onPress={onForgotPasswordPressed}
           type={'TERTIARY'}
         />
         <CustomButton
           text={'Sign In With Google'}
           onPress={() => {
             onSignInGooglePressed().then(() => {
+              GooglesignIncancled();
               auth().onAuthStateChanged(user => {
                 if (user) {
                   navigation.replace('Home');

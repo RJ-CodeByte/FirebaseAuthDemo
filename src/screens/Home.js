@@ -4,7 +4,7 @@ import CustomButton from '../components/CustomButton';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import auth from '@react-native-firebase/auth';
 
-function Home({navigation,route}) {
+function Home({navigation, route}) {
   const currentUser = auth().currentUser;
   useEffect(() => {
     GoogleSignin.configure({
@@ -14,13 +14,8 @@ function Home({navigation,route}) {
   }, []);
 
   const signOut = async () => {
-      auth().signOut();
-      // if(GoogleSignin.isSignedIn()){
-      // await GoogleSignin.revokeAccess();
-      // await GoogleSignin.signOut();
-      // await GoogleSignin.getCurrentUser();
-      // }
-      navigation.replace('Auth');
+    auth().signOut();
+    navigation.replace('Auth');
   };
 
   return (
@@ -32,9 +27,18 @@ function Home({navigation,route}) {
       <Text>{currentUser.displayName}</Text>
       {/* <Text>{user}</Text> */}
       <CustomButton onPress={signOut} text={'Sign Out'} />
-      <CustomButton onPress={()=>navigation.navigate('FirestoreDb')} text={'Firestore FLATLIST'} />
-      <CustomButton onPress={()=>navigation.navigate('FirestoreCRUD')} text={'Firestore CRUD'} />
-      <CustomButton onPress={()=>navigation.navigate('RemoteConfig')} text={'Remote Config'} />
+      <CustomButton
+        onPress={() => navigation.navigate('FirestoreDb')}
+        text={'Firestore FLATLIST'}
+      />
+      <CustomButton
+        onPress={() => navigation.navigate('FirestoreCRUD')}
+        text={'Firestore CRUD'}
+      />
+      <CustomButton
+        onPress={() => navigation.navigate('RemoteConfig')}
+        text={'Remote Config'}
+      />
     </View>
   );
 }
